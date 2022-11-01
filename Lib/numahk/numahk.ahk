@@ -3,6 +3,7 @@
 ; Version: 1.0.0
 
 #Include <ahktype\ahktype>
+#Include <data\debug>
 #Include <xa\xa>
 
 ; DefProp
@@ -139,6 +140,23 @@ Class Numahk
             
             Tmp.RemoveAt(LastPos)
             Tmp.InsertAt(LastPos, Value)
+        }
+        
+        ToString()
+        {
+            if this.Length < 1
+                return "[]"
+            
+            plus := ""
+            text := "[" . debug.ToString(this[1])
+            
+            Loop this.Length - 1
+                plus .= "," . debug.ToString(this[A_Index + 1])
+            
+            text .= plus
+            text .= "]"
+            
+            return text
         }
         
         ; Operator
