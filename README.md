@@ -1,2 +1,2 @@
 # AutoHotkeyLib
-My own lib
+My own lib for AutoHotkey v2 beta13+
