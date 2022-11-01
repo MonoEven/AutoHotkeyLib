@@ -1,0 +1,2 @@
+# AutoHotkeyLib
+My own lib
