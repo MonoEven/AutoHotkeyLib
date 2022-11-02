@@ -2802,6 +2802,50 @@ Class Numahk
             Return y
         }
         
+        Static Choice(a, size := 1, replace := True, p := "")
+        {
+            if a is Integer
+            {
+                tmp := _(_) => Numahk.Random.RandInt(0, a)
+                
+                if size is Integer
+                    Return Numahk.Array(oneloop(tmp, Range(size)))
+                
+                else
+                    Return Numahk.Array(oneloop(tmp, Range(size.product)).Reshape(size))
+            }
+            
+            else if p = ""
+            {
+                _tmp := ____(_) => a[Numahk.Random.RandInt(1, a.Length + 1)]
+                
+                if size is Integer
+                    Return Numahk.Array(oneloop(_tmp, Range(size)))
+                
+                else
+                    Return Numahk.Array(oneloop(_tmp, Range(size.product)).Reshape(size))
+            }
+            
+            else
+            {
+                ret := []
+                _sum := p.sum
+                _size := size is Integer ? size : size.product
+                loop _size
+                {
+                    tmp := _sum ? [] : a
+                    while !tmp.Length
+                        tmp := oneloop(__(_*) => a[_[1]], p, 2, ___(_*) => Numahk.Random.Rand() <= (_[2] / _sum))
+                    ret.Push(tmp[Numahk.Random.RandInt(1, tmp.Length + 1)])
+                }
+                
+                if size is Integer
+                    Return Numahk.Array(ret)
+                else
+                    Return Numahk.Array(ret).Reshape(size)
+            }
+        }
+        
         Static Gamma(alpha, beta := 1, Shape := -1)
         {
             if Shape = -1
