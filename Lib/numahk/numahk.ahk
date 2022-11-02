@@ -2805,17 +2805,9 @@ Class Numahk
         Static Choice(a, size := 1, replace := True, p := "")
         {
             if a is Integer
-            {
-                tmp := _(_) => Numahk.Random.RandInt(0, a)
-                
-                if size is Integer
-                    Return Numahk.Array(oneloop(tmp, Range(size)))
-                
-                else
-                    Return Numahk.Array(oneloop(tmp, Range(size.product)).Reshape(size))
-            }
+                a := Range(0, a - 1).Array()
             
-            else if p = ""
+            if p = ""
             {
                 _tmp := ____(_) => a[Numahk.Random.RandInt(1, a.Length + 1)]
                 
