@@ -133,6 +133,7 @@ DefProp({}.Base, "Values", {Get: GetObjectValues})
 DefProp("".Base, "Array", {Get: StrSplit})
 DefProp("".Base, "Decode", {Get: StrDecode})
 DefProp("".Base, "Encode", {Get: StrEncode})
+DefProp("".Base, "Format", {Get: StrFormat})
 DefProp("".Base, "Join", {Get: StrJoin})
 DefProp("".Base, "Replace", {Get: StrRep})
 DefProp("".Base, "TmpType", {Value: Map()})
@@ -1388,6 +1389,16 @@ StringSign(this)
     }
     
     Return 0
+}
+
+StrFormat(this)
+{
+    Return StrFormat2
+}
+
+StrFormat2(this, param*)
+{
+    Return Format(this, param*)
 }
 
 StrJoin(this)
