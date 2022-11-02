@@ -1,15 +1,11 @@
 ﻿#Include <ahktype\ahktype>
 #Include <std\metafunc\iter>
 
-sum(_iter, start)
+sum(_iter, start := 0)
 {
+    ret := start
     for i in iter(_iter)
     {
-        if unset(ret)
-        {
-            ret := i
-            continue
-        }
         if ret is string
             ret .= i
         else if ret is number
@@ -25,7 +21,5 @@ sum(_iter, start)
         else
             throw Error("unsumable", -1)
     }
-    if unset(ret)
-        throw Error("iter is empty", -1)
     return ret
 }
