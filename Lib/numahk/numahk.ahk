@@ -3245,6 +3245,14 @@ Class Numahk
         }
     }
     
+    Class Testing
+    {
+        Static Assert_Almost_Equal(Actual, Desired, Decimal := 7, Err_Msg := "", Verbose := True)
+        {
+            Assert(Abs(Desired - Actual) < 1.5 * 10 ** (-Decimal), Err_Msg)
+        }
+    }
+    
     Class TimeStamp
     {
         Static ConvertUnix(InputTime, Zone := 8)
