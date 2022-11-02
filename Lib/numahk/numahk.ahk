@@ -3321,7 +3321,7 @@ Dynloop_Loop(Data)
 
     For item in Data
     {
-        _n := item.Length
+        _n := HasProp(item, "Length") ? item.Length : 1
         Arr_len.Push(_n)
         Lst_row.Extend(item)
         Row_max_idx *= _n
