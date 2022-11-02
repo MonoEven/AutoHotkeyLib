@@ -330,10 +330,16 @@ ArrReshape2(this, Shape)
     OldShape := this.Shape
     TmpShape := Shape.Clone()
     
-    if OldShape.Product !== Shape.Product
+    For i in TmpShape
+    {
+        if i = -1
+            TmpShape[A_Index] := OldShape.Product // Abs(Shape.Product)
+    }
+    
+    if OldShape.Product !== TmpShape.Product
         Return this
     
-    if Shape.Length == 1
+    if TmpShape.Length == 1
         Return this.Ravel()
     
     this.Ravel()
@@ -506,7 +512,7 @@ FloatSign(this)
 
 GetArrDims(this)
 {
-    Tmp := []
+    Tmp := [0]
     
     For i in this
         Tmp.Push(HasProp(i, "Dims") ? i.Dims : 0)
