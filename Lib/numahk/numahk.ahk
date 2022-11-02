@@ -253,7 +253,38 @@ Class Numahk
         
         Reshape(Shape*)
         {
-            Return Numahk.NDArray(Super.Reshape(Shape*))
+            if Shape.NDim == 2
+                Shape := Shape[1]
+            
+            OldShape := this.Shape
+            TmpShape := Shape.Clone()
+            
+            if OldShape.Product !== Shape.Product
+                Return this
+            
+            if Shape.Length == 1
+                Return this.Ravel()
+            
+            this.Ravel()
+            Tmpthis := this.Clone()
+            Tmp := []
+            LoopTimes := TmpShape.RemoveAt(1)
+            
+            Loop LoopTimes
+            {
+                Tmp2 := []
+                Loop TmpShape.Product
+                    Tmp2.Push(Tmpthis.RemoveAt(1))
+                
+                Tmp.Push(Tmp2.Reshape(TmpShape))
+            }
+            
+            this.Length := 0
+            
+            For j in Tmp
+                this.Push(Numahk.NDArray(j))
+            
+            Return this
         }
         
         Sort(Axis := "axis=None")
