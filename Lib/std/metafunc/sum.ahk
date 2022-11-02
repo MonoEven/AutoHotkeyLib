@@ -1,5 +1,4 @@
-﻿#Include <ahktype\ahktype>
-#Include <std\metafunc\iter>
+﻿#Include <std\metafunc\iter>
 
 sum(_iter, start := 0)
 {

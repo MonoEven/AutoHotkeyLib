@@ -1,4 +1,6 @@
-﻿iter(_iter)
+﻿#Include <ahktype\ahktype>
+
+iter(_iter)
 {
     if hasmethod(_iter, "__enum")
         return _iter
