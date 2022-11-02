@@ -1,5 +1,5 @@
 ; Author: Mono
-; Time: 2022.09.08
+; Time: 2022.11.02
 ; Version: 1.0.0
 
 #Include <ahktype\ahktype>
@@ -26,6 +26,11 @@ Class Numahk
     Static TAU := 6.283185307179586
     Static INF := 2 ** 63 - 1
     Static NAN := "-"
+    
+    Static __version()
+    {
+        Return "1.0.0"
+    }
     
     Class NDArray Extends Array
     {
@@ -59,6 +64,11 @@ Class Numahk
         {
             Get => this.GetMethod(Pos*)
             Set => this.SetMethod(Value, True, Pos*)
+        }
+        
+        __Len()
+        {
+            Return this.Shape
         }
         
         GetMethod(Lst_Pos*)
