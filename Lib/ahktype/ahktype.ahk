@@ -750,7 +750,7 @@ GetObjectItems2(this)
 {
     Tmp := []
     
-    For Key, Value in this.OwnProps
+    For Key, Value in this.OwnProps()
         Tmp.Push([Key, Value])
     
     Return Tmp
