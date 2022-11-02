@@ -109,10 +109,13 @@ Class Print
     
     Static ToString(Text)
     {
-        if Type(Text) == "Array" || Type(Text) == "Numahk.NDArray"
+        if HasMethod(Text, "ToString")
+            return Text.ToString()
+        
+        else if Type(Text) == "Array" || Type(Text) == "Numahk.NDArray"
         {
             if Text.Length < 1
-                Text.InsertAt(1, "")
+                Return "[]"
             
             String_Plus := ""
             String_Text := "[" . Print.ToString(Text[1])
@@ -129,7 +132,7 @@ Class Print
         else if Type(Text) == "List"
         {
             if Text.Length < 1
-                Text.InsertAt(1, "")
+                Return "[]"
             
             String_Plus := ""
             String_Text := "[" . Print.ToString(Text[0])
@@ -166,7 +169,7 @@ Class Print
         else if Type(Text) == "Numpy.NDArray"
         {
             if Text.array.Length < 1
-                Text.array.InsertAt(1, "")
+                Return "[]"
             
             String_Plus := ""
             String_Text := "[" . Print.ToString(Text.array[0])
