@@ -357,6 +357,11 @@ Class Numahk
     }
     
     ; NoUse
+    Static Reshape(NDArray, Shape*)
+    {
+        Return Numahk.NDArray(NDArray.Reshape(Shape*))
+    }
+    
     Static Transpose(NDArray)
     {
         New_Shape := NDArray.Shape.Clone().Reverse()
