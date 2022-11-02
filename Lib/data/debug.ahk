@@ -111,7 +111,7 @@
         else if Type(Text) == "Array"
         {
             if Text.Length < 1
-                Text.InsertAt(1, "")
+                Return "[]"
             
             String_Plus := ""
             String_Text := "[" . debug.ToString(Text[1])
