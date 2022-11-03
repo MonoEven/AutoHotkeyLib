@@ -160,8 +160,11 @@
             return String_Text
         }
         
-        else if Type(Text) == "Integer" || Type(Text) == "String"
-            return String(Text)
+        else if Type(Text) == "Integer"
+            return Text
+        
+        else if Type(Text) == "String"
+            return Format('"{}"', Text)
         
         else if Type(Text) == "Float"
             return Round(Text, this.FloatPos)
