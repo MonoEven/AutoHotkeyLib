@@ -4,8 +4,10 @@
 
 #Include <print\print>
 #Include <std\init>
-; Init DefProp
+
+; Init DefProp & DelProp
 DefProp := {}.DefineProp
+DelProp := {}.DeleteProp
 
 
 ; Redefine Dims
@@ -90,11 +92,15 @@ DefProp([].Base, "Swap", {Get: ArrSwap})
 
 
 ; Redefine Float
+DefProp(0.0.Base, "_", {Get: Float_})
 DefProp(0.0.Base, "Array", {Get: StrSplit})
 
 
 ; Redefine Integer
+DefProp(0.Base, "_", {Get: Integer_})
 DefProp(0.Base, "Array", {Get: StrSplit})
+DefProp(0.Base, "Bit_Count", {Get: IntegerBitCount})
+DefProp(0.Base, "Bit_Length", {Get: IntegerBitLength})
 DefProp(0.Base, "ToBase", {Get: IntegerToBase})
 
 
@@ -113,20 +119,8 @@ DefProp(Map().Base, "Values", {Get: GetMapValues})
 
 
 ; Redefine Object
-DefProp({}.Base, "Count", {Get: ObjectCount})
-DefProp({}.Base, "FromKeys", {Get: ObjectFromKeys})
-DefProp({}.Base, "Get", {Get: ObjectGet})
-DefProp({}.Base, "Item", {Get: GetObjectItem})
-DefProp({}.Base, "Items", {Get: GetObjectItems})
-DefProp({}.Base, "Keys", {Get: GetObjectKeys})
-DefProp({}.Base, "Map", {Get: Object2Map})
-DefProp({}.Base, "Pop", {Get: ObjectPop})
-DefProp({}.Base, "PopItem", {Get: ObjectPopItem})
-DefProp({}.Base, "Set", {Get: ObjectSet})
-DefProp({}.Base, "Setdefault", {Get: ObjectSetdefault})
-DefProp({}.Base, "SetItem", {Get: SetObjectItem})
-DefProp({}.Base, "Update", {Get: ObjectUpdate})
-DefProp({}.Base, "Values", {Get: GetObjectValues})
+DefProp({}.Base, "Copy", {Get: ObjectCopy})
+DefProp({}.Base, "Extends", {Get: ObjectExtends})
 
 
 ; Redefine String
@@ -497,6 +491,11 @@ ArrSwap2(this, Index1, Index2)
     Return this
 }
 
+Float_(this)
+{
+    Return Integer(this) ":"
+}
+
 FloatRange(this)
 {
     Return Integer(this)
@@ -731,61 +730,6 @@ GetMapValues2(this)
     Return Tmp
 }
 
-GetObjectItem(this)
-{
-    Return GetObjectItem2
-}
-
-GetObjectItem2(this, Key)
-{
-    Return this.%Key%
-}
-
-GetObjectItems(this)
-{
-    Return GetObjectItems2
-}
-
-GetObjectItems2(this)
-{
-    Tmp := []
-    
-    For Key, Value in this.OwnProps()
-        Tmp.Push([Key, Value])
-    
-    Return Tmp
-}
-
-GetObjectKeys(this)
-{
-    Return GetObjectKeys2
-}
-
-GetObjectKeys2(this)
-{
-    Tmp := []
-    
-    For Key in this.OwnProps()
-        Tmp.Push(Key)
-    
-    Return Tmp
-}
-
-GetObjectValues(this)
-{
-    Return GetObjectValues2
-}
-
-GetObjectValues2(this)
-{
-    Tmp := []
-    
-    For Key, Value in this.OwnProps()
-        Tmp.Push(Value)
-    
-    Return Tmp
-}
-
 InObj(this)
 {
     Return InObj2
@@ -826,6 +770,44 @@ InObj2(this, Obj)
     Return False
 }
 
+Integer_(this)
+{
+    Return Integer__(this)
+}
+
+Class Integer__
+{
+    __New(Start)
+    {
+        this.Start := Start
+    }
+    
+    __Get(End, _)
+    {
+        Return this.Start ":" End
+    }
+}
+
+IntegerBitCount(this)
+{
+    Return IntegerBitCount2
+}
+
+IntegerBitCount2(this)
+{
+    Return Abs(this).ToBase(2).Array.Count("1")
+}
+
+IntegerBitLength(this)
+{
+    Return IntegerBitLength2
+}
+
+IntegerBitLength2(this)
+{
+    Return StrLen(LTrim(Abs(this).ToBase(2), "0"))
+}
+
 IntegerRange(this)
 {
     Return this
@@ -847,7 +829,8 @@ IntegerToBase(this)
 
 IntegerToBase2(this, Base := 2)
 {
-    Ret := IntegerToBase3(this, Base)
+    Sign := this.Sign
+    Ret := IntegerToBase3(Abs(this), Base)
     
     if Base == 2
     {
@@ -857,7 +840,7 @@ IntegerToBase2(this, Base := 2)
             Ret := "0" Ret
     }
     
-    Return Ret
+    Return Sign = -1 ? "-" Ret : Ret
 }
 
 IntegerToBase3(this, Base)
@@ -986,116 +969,24 @@ MapUpdate2(this, NewMap)
     Return this
 }
 
-Object2Map(this)
+ObjectCopy(this)
 {
-    Tmp := Map()
-    
-    For Key, Value in this.OwnProps()
-        Tmp[Key] := Value
-    
-    Return Tmp
+    Return ObjectCopy2
 }
 
-ObjectCount(this)
+ObjectCopy2(this)
 {
-    Return this.Map.Count
+    Return this.Clone()
 }
 
-ObjectFromKeys(this)
+ObjectExtends(this)
 {
-    Return ObjectFromKeys2
+    Return ObjectExtends2
 }
 
-ObjectFromKeys2(this, seq, value := "")
+ObjectExtends2(this, _Class)
 {
-    For i in seq
-        this.%i% := value
-    
-    Return this
-}
-
-ObjectGet(this)
-{
-    Return ObjectGet2
-}
-
-ObjectGet2(this, Key, Default := "")
-{
-    if !Default
-        Return this.Map[Key]
-    
-    Return this.Map.Get(Key, Default)
-}
-
-ObjectPop(this)
-{
-    Return ObjectPop2
-}
-
-ObjectPop2(this, Key, Default := "")
-{
-    if this.HasOwnProp(Key)
-        Return this.DeleteProp(Key)
-    
-    Return Default
-}
-
-ObjectPopItem(this)
-{
-    Return ObjectPopItem2
-}
-
-ObjectPopItem2(this)
-{
-    if !this.Count
-        Throw IndexError("This Object() is empty.")
-    
-    For Key, Value in this.OwnProps()
-        Tmp := Key
-    
-    Return this.DeleteProp(Tmp)
-}
-
-ObjectSet(this)
-{
-    Return ObjectSet2
-}
-
-ObjectSet2(this, Obj*)
-{
-    this.Map := this.Map.Set(Obj*)
-    
-    For Key, Value in this.Map
-        this.%Key% := Value
-    
-    Return this
-}
-
-ObjectSetdefault(this)
-{
-    Return ObjectSetdefault2
-}
-
-ObjectSetdefault2(this, Key, Default := "")
-{
-    if this.Map.Has(Key)
-        Return this
-    
-    else
-        this.%Key% := Default
-    
-    Return this
-}
-
-ObjectUpdate(this)
-{
-    Return ObjectUpdate2
-}
-
-ObjectUpdate2(this, NewObject)
-{
-    For Key, Value in NewObject.OwnProps()
-        this.%Key% := Value
+    this.Base := _Class
     
     Return this
 }
@@ -1171,18 +1062,6 @@ SetArrItem2(this, Pos*)
         Tmp.Push(Tmp.Pop()[Pos[A_Index]])
     
     Tmp[-1][Pos[-1]] := Value
-    
-    Return this
-}
-
-SetObjectItem(this)
-{
-    Return SetObjectItem2
-}
-
-SetObjectItem2(this, Key, Value)
-{
-    this.%Key% := Value
     
     Return this
 }
