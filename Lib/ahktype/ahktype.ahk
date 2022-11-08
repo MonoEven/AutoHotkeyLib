@@ -1,5 +1,5 @@
 ; Author: Mono
-; Time: 2022.09.08
+; Time: 2022.11.08
 ; Version: 1.0.0
 
 #Include <print\print>
@@ -987,6 +987,7 @@ ObjectExtends(this)
 ObjectExtends2(this, _Class)
 {
     this.Base := _Class
+    this.ProtoType := _Class.ProtoType
     
     Return this
 }
@@ -1072,7 +1073,8 @@ StrDecode(this)
 }
 
 StrDecode2(this, Encoding := -1)
-{    if Encoding == -1
+{
+    if Encoding == -1
     {
         if this.Type != "String"
             Encoding := this.Type
