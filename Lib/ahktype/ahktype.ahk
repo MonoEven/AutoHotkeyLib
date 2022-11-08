@@ -784,6 +784,7 @@ Class Integer__
     
     __Get(End, _)
     {
+        End := End is Integer ? End : %End%
         Return this.Start ":" End
     }
 }
