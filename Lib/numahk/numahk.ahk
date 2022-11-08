@@ -3310,17 +3310,17 @@ Class Numahk
         
         Static ConvertCommon(InputTime, TimeType, Zone := 8)
         {
-            Deviation := Zone * 60 * 60
+            Deviation := -Zone * 60 * 60
             Init := 62135596800
             
             if TimeType = "UTC"
             {
-                Ret := DateAdd(19700101000000, (InputTime // 10000000) - Init + Deviation, "Seconds")
+                Ret := (DateDiff(InputTime, 19700101000000, "Seconds") + Deviation + Init) * 10000000
             }
             
             else if TimeType == "Unix"
             {
-                Ret := DateAdd(19700101000000, InputTime + Deviation, "Seconds")
+                Ret := DateDiff(InputTime, 19700101000000, "Seconds") + Deviation
             }
             
             Return Ret
