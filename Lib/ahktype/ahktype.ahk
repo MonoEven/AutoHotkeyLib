@@ -1,6 +1,6 @@
 ; Author: Mono
 ; Time: 2022.11.08
-; Version: 1.0.0
+; Version: 1.0.1
 
 #Include <print\print>
 #Include <std\init>
