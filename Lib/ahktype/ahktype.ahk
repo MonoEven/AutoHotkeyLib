@@ -986,7 +986,8 @@ ObjectExtends(this)
 
 ObjectExtends2(this, _Class)
 {
-    this.Base := _Class
+    Try
+        this.Base := _Class
     Try
         this.ProtoType := _Class.ProtoType
     
